@@ -1,6 +1,15 @@
 import React from 'react'
 import AppleLogin from 'react-apple-login'
 
+//Listen for authorization success
+document.addEventListener('AppleIDSignInOnSuccess', (data) => {
+  console.log(data)
+});
+//Listen for authorization failures
+document.addEventListener('AppleIDSignInOnFailure', (error) => {
+  console.log(error)
+});
+
 var setting = {
     clientId: 'com.react.apple.login',
     redirectURI: 'https://redirectUrl.com',
