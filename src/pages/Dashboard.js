@@ -131,6 +131,7 @@ function createData(unNum, bpm, date) {
 export default function Dashboard() {
   const classes = useStyles();
 
+  const [datesButtonDis, setDatesButtonDis] = useState(false);
   const [heartData, setHeartData] = useState([]);
   const [rows, setRows] = useState([]);
   const [page, setPage] = useState(0);
@@ -146,7 +147,7 @@ export default function Dashboard() {
         HeartRateService.getUsers('001072.b2df559565e4408586c5ff8852b01b65.0530').then(response => {
             let arr = [];
             Object.keys(response.data).forEach(function(key) {
-                let currDate = moment(response.data[key].date.substring(0, 19));
+                let currDate = moment(response.data[key].date);
                 let HeartRate = {
                     bpm: response.data[key].bpm,
                     date: currDate,
@@ -155,25 +156,32 @@ export default function Dashboard() {
                 arr.push(HeartRate);
             });
             let arrTable = arr.reverse();
-            setLastRec(arrTable[0].bpm);
-            setHeartData(arrTable);
-            let data = [];
-            for(let i = 0; i < arrTable.length; i++){
-              data.push(createData(i, arrTable[i].bpm, arrTable[i].date.format('lll')));
-            }
-            setRows(data);
-            let chartdata = "{";
-            let currAveRate = 0;
-            for(let i = 0; i < 10; i++){
-                currAveRate += arrTable[i].bpm;
-                chartdata += '"' + arrTable[i].date.format('') + '": ' + arrTable[i].bpm;
-                if(i !== 9){
-                    chartdata += ",";
+
+            if (arrTable.length !== 0 ){
+                setLastRec(arrTable[0].bpm);
+                setHeartData(arrTable);
+                let data = [];
+                for(let i = 0; i < arrTable.length; i++){
+                    data.push(createData(i, arrTable[i].bpm, arrTable[i].date.format('lll')));
                 }
+                setRows(data);
+            
+                let chartdata = "{";
+                let currAveRate = 0;
+                for(let i = 9; i >= 0; i--){
+                    currAveRate += arrTable[i].bpm;
+                    chartdata += '"' + arrTable[i].date.format('MMM D, YYYY h:m.s') + '": ' + arrTable[i].bpm;
+                    if(i !== 0){
+                        chartdata += ",";
+                    }
+                }
+                console.log("Chart Data:", chartdata);
+                chartdata += "}"
+                setData(JSON.parse(chartdata));
+                setAvgRate(Math.round(currAveRate / 10));
+            } else {
+                setDatesButtonDis(true);
             }
-            chartdata += "}"
-            setData(JSON.parse(chartdata));
-            setAvgRate(Math.round(currAveRate / 10));
         })
     }, [])
 
@@ -189,13 +197,13 @@ export default function Dashboard() {
                     break; 
                 }
                 currAveRate += arr[i].bpm;
-                chartdata += '"' + arr[i].date.format('') + '": ' + arr[i].bpm + ',';
+                chartdata += '"' + arr[i].date.format('MMM D, YYYY h:m.s') + '": ' + arr[i].bpm + ',';
                 count++;
             }
         } else {
             for(let i = 0; i < arr.length; i++){
                 currAveRate += arr[i].bpm;
-                chartdata += '"' + arr[i].date.format('') + '": ' + arr[i].bpm + ',';
+                chartdata += '"' + arr[i].date.format('MMM D, YYYY h:m.s') + '": ' + arr[i].bpm + ',';
                 count++;
             }
         }
@@ -225,10 +233,10 @@ export default function Dashboard() {
         setRows(data);
         let chartdata = "{";
         let currAveRate = 0;
-        for(let i = 0; i < 10; i++){
+        for(let i = 9; i >= 0; i--){
             currAveRate += heartData[i].bpm;
-            chartdata += '"' + heartData[i].date.format('') + '": ' + heartData[i].bpm;
-            if(i !== 9){
+            chartdata += '"' + heartData[i].date.format('MMM D, YYYY h:m.s') + '": ' + heartData[i].bpm;
+            if(i !== 0){
                 chartdata += ",";
             }
         }
@@ -261,7 +269,7 @@ export default function Dashboard() {
                     heartRates += heartData[i].bpm;
                     numRates++;
                     tableData.push(createData(i, heartData[i].bpm, heartData[i].date.format('lll')));
-                    chartData += '"' + heartData[i].date.format('') + '": ' + heartData[i].bpm + ',';
+                    chartData += '"' + heartData[i].date.format('MMM D, YYYY h:m.s') + '": ' + heartData[i].bpm + ',';
                 }
             }
             if (numRates > 0) {
@@ -292,7 +300,7 @@ export default function Dashboard() {
         <Grid>
             <SideBar />
         </Grid>
-        <Grid lg={10}>
+        <Grid lg={10} >
             <div className={classes.gridRight}>
                 <div className={classes.heading}>
                     <div className={classes.rootHead}>
@@ -302,7 +310,7 @@ export default function Dashboard() {
                                 <div style={{fontSize: '20px'}}>This is your Dashboard</div>
                             </Grid>
                             <Grid className={classes.signIn} item xs={6}>
-                            <Button className={classes.button} onClick={handleClickOpen}>Select Dates</Button>
+                            <Button disabled={datesButtonDis} className={classes.button} onClick={handleClickOpen}>Select Dates</Button>
                             </Grid>
                         </Grid>
                     </div>
@@ -363,12 +371,13 @@ export default function Dashboard() {
                                     BPM VS Time
                                 </div>
                             <LineChart 
-                                
                                 messages={{empty: "No data"}}
                                 titel = "Heart Rate"
                                 ytitle= "Beats per Minute (BPM)"
                                 xtitle= "Date Time"
-                                data={data} />
+                                data={data} 
+                                discrete = {true}
+                                />
                             </Paper>
                         </div>
                         <Grid container>

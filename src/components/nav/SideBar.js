@@ -94,7 +94,13 @@ export default function PermanentDrawerLeft() {
             <ListItem>
               <Button style={{width: '100%'}}>
                   <ListItemIcon className={classes.listLabel}><FavoriteIcon /></ListItemIcon>
-                  <ListItemText><Typography className={classes.listLabel}>Live</Typography></ListItemText>
+                  <ListItemText><Typography className={classes.listLabel}>Last Recorded</Typography></ListItemText>
+              </Button>
+            </ListItem>
+            <ListItem>
+              <Button style={{width: '100%'}}>
+                  <ListItemIcon className={classes.listLabel}><FavoriteIcon /></ListItemIcon>
+                  <ListItemText><Typography className={classes.listLabel}>Average</Typography></ListItemText>
               </Button>
             </ListItem>
         </List>

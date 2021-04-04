@@ -12,7 +12,7 @@ class HeartRateService {
             }
         };
 
-        const response = await axios.get("http://localhost:3001/api/heartrate", axiosConfig);
+        const response = await axios.get("https://iheartrate-back.herokuapp.com/api/heartrate", axiosConfig);
         return response.data;
     }
 
@@ -26,7 +26,7 @@ class HeartRateService {
             }
         };
 
-        const response = await axios.get("http://localhost:3001/api/heartrate/" + userid, axiosConfig);
+        const response = await axios.get("https://iheartrate-back.herokuapp.com/api/heartrate/" + userid, axiosConfig);
         return response;
     }
 }
