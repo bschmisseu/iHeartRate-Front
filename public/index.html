@@ -18,12 +18,22 @@
     <!-- <link rel="manifest" href="%PUBLIC_URL%/manifest.json" /> -->
     <meta name="appleid-signin-client-id" content="8VLPQ9YCVX">
     <meta name="appleid-signin-scope" content="scope=name email">
-    <meta name="appleid-signin-redirect-uri" content="/">
-    <meta name="appleid-signin-use-popup" content="true"> <!-- or false defaults to false -->
+    <meta name="appleid-signin-redirect-uri" content="/Dashboard">
+    <meta name="appleid-signin-use-popup" content="true"> 
     <script type="text/javascript" src="https://appleid.cdn-apple.com/appleauth/static/jsapi/appleid/1/en_US/appleid.auth.js"></script>
     <title>iHeartRate</title>
   </head>
   <body>
+    <script>
+      //Listen for authorization success
+      document.addEventListener('AppleIDSignInOnSuccess', (data) => {
+          console.log("Apple Sign on data", data);
+      });
+      //Listen for authorization failures
+      document.addEventListener('AppleIDSignInOnFailure', (error) => {
+        console.log("Apple Sign on errro", error);
+      });
+    </script>
     <noscript>You need to enable JavaScript to run this app.</noscript>
     <div id="root"></div>
   </body>

@@ -4,6 +4,7 @@ import Drawer from '@material-ui/core/Drawer';
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import List from '@material-ui/core/List';
+import { Link } from 'react-router-dom';
 import Divider from '@material-ui/core/Divider';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
@@ -14,6 +15,8 @@ import FavoriteIcon from '@material-ui/icons/Favorite';
 import Avatar from '@material-ui/core/Avatar';
 import Typography from '@material-ui/core/Typography';
 import picture from '../../photos/bryce.png';
+import ExitToAppIcon from '@material-ui/icons/ExitToApp';
+import InsertDriveFileIcon from '@material-ui/icons/InsertDriveFile';
 
 const drawerWidth = 240;
 
@@ -102,6 +105,23 @@ export default function PermanentDrawerLeft() {
                   <ListItemIcon className={classes.listLabel}><FavoriteIcon /></ListItemIcon>
                   <ListItemText><Typography className={classes.listLabel}>Average</Typography></ListItemText>
               </Button>
+            </ListItem>
+              <Divider style={{backgroundColor: 'rgba(255, 255, 255, 0.2)', width: '90%', marginLeft: '5%'}}/>
+            <ListItem>
+              <Link to="/userlogs" style={{textDecoration: 'none'}}>
+              <Button style={{width: '100%'}}>
+                  <ListItemIcon className={classes.listLabel}><InsertDriveFileIcon /></ListItemIcon>
+                  <ListItemText><Typography className={classes.listLabel}>Report Log</Typography></ListItemText>
+              </Button>
+              </Link>
+            </ListItem>
+            <ListItem>
+            <Link to="/logout" style={{textDecoration: 'none'}}>
+              <Button style={{width: '100%'}}>
+                  <ListItemIcon className={classes.listLabel}><ExitToAppIcon /></ListItemIcon>
+                  <ListItemText><Typography className={classes.listLabel}>Logout</Typography></ListItemText>
+              </Button>
+              </Link>
             </ListItem>
         </List>
       </Drawer>
